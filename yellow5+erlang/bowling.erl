@@ -7,7 +7,7 @@ score(Frames) ->
   case {FrameCount, Score} of
     {10, 0}   -> {complete, 0, "Skunky town..."};
     {10, 300} -> {complete, 300, "Perfect game!"};
-    {10, _}   -> {complete, Score, "Game over"};
+    {10, _}   -> {complete, Score, "Game over."};
     _         -> {incomplete, Score, "Don't give up, keep playing!"}
   end.
 

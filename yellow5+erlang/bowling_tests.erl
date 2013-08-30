@@ -6,7 +6,7 @@ score_test() ->
   Spare  = <<"/">>,
   IncompleteMsg = "Don't give up, keep playing!",
   SkunkyTownMsg = "Skunky town...",
-  CompletedMsg  = "Game over",
+  CompletedMsg  = "Game over.",
   PerfectGameMsg = "Perfect game!",
 
   %% Empty list
