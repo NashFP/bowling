@@ -6,7 +6,7 @@ score_test() ->
   Spare  = <<"/">>,
   IncompleteMsg = "Don't give up, keep playing!",
   SkunkyTownMsg = "Skunky town...",
-  CompletedMsg  = "Game over",
+  CompletedMsg  = "Game over.",
   PerfectGameMsg = "Perfect game!",
 
   %% Empty list
@@ -84,4 +84,32 @@ score_test() ->
     bowling:score([
         [9,Spare], [8,Spare], [9,Spare], [9,0], [7,Spare], [8,Spare], [9,Spare], [7,0], [6,3], [9,Spare,9]
         ]) =:= {complete, 154, CompletedMsg}
+    ).
+
+tweetable_score_test() ->
+  Strike = <<"X">>,
+  Spare  = <<"/">>,
+
+  %% Incomplete games
+  ?assert(bowling:tweetable_score([[0,0]]) =:= "Don't give up, keep playing! Incomplete bowling score: 0"),
+  ?assert(bowling:tweetable_score([[2,7]]) =:= "Don't give up, keep playing! Incomplete bowling score: 9"),
+  ?assert(bowling:tweetable_score([[0,Spare]]) =:= "Don't give up, keep playing! Incomplete bowling score: 10"),
+  ?assert(bowling:tweetable_score([[Strike], [Strike], [Strike], [Strike], [Strike], [Strike]]) =:= "Don't give up, keep playing! Incomplete bowling score: 120"),
+  ?assert(length(bowling:tweetable_score([[Strike], [Strike], [Strike], [Strike], [Strike], [Strike]])) =< 140),
+
+  %% Complete games
+  ?assert(
+    bowling:tweetable_score([
+        [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]
+        ]) =:= "Skunky town... Bowling score: 0"
+    ),
+  ?assert(
+    bowling:tweetable_score([
+        [Strike], [Strike], [8,Spare], [Strike], [9,Spare], [8,Spare], [Strike], [Strike], [9,Spare], [Strike,Strike,Strike]
+        ]) =:= "Game over. Bowling score: 225"
+    ),
+  ?assert(
+    bowling:tweetable_score([
+        [Strike], [Strike], [Strike], [Strike], [Strike], [Strike], [Strike], [Strike], [Strike], [Strike,Strike,Strike]
+        ]) =:= "Perfect game! Bowling score: 300"
     ).
