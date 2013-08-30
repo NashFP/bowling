@@ -1,5 +1,5 @@
 -module(bowling).
--export([score/1]).
+-export([score/1, tweetable_score/1]).
 
 score(Frames) ->
   Score = score(lists:flatten(Frames), 0),
@@ -9,6 +9,15 @@ score(Frames) ->
     {10, 300} -> {complete, 300, "Perfect game!"};
     {10, _}   -> {complete, Score, "Game over."};
     _         -> {incomplete, Score, "Don't give up, keep playing!"}
+  end.
+
+tweetable_score(Frames) ->
+  {Status, Score, Msg} = score(Frames),
+  case Status of
+    complete   ->
+      lists:flatten(io_lib:format("~s Bowling score: ~w", [Msg, Score]));
+    incomplete ->
+      lists:flatten(io_lib:format("~s Incomplete bowling score: ~w", [Msg, Score]))
   end.
 
 score([], Score) ->
