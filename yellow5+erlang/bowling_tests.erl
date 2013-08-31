@@ -113,3 +113,31 @@ tweetable_score_test() ->
         [Strike], [Strike], [Strike], [Strike], [Strike], [Strike], [Strike], [Strike], [Strike], [Strike,Strike,Strike]
         ]) =:= "Perfect game! Bowling score: 300"
     ).
+
+tweetable_ermahgerd_score_test() ->
+  Strike = <<"X">>,
+  Spare  = <<"/">>,
+
+  %% Erncermplert germahs
+  ?assert(bowling:tweetable_ermahgerd_score([[0,0]]) =:= "Ermahgerd, dernt gerv erp, kerp plin! Erncermplert berlin scer: 0"),
+  ?assert(bowling:tweetable_ermahgerd_score([[2,7]]) =:= "Ermahgerd, dernt gerv erp, kerp plin! Erncermplert berlin scer: 9"),
+  ?assert(bowling:tweetable_ermahgerd_score([[0,Spare]]) =:= "Ermahgerd, dernt gerv erp, kerp plin! Erncermplert berlin scer: 10"),
+  ?assert(bowling:tweetable_ermahgerd_score([[Strike], [Strike], [Strike], [Strike], [Strike], [Strike]]) =:= "Ermahgerd, dernt gerv erp, kerp plin! Erncermplert berlin scer: 120"),
+  ?assert(length(bowling:tweetable_ermahgerd_score([[Strike], [Strike], [Strike], [Strike], [Strike], [Strike]])) =< 140),
+
+  %% Cermplert germahs
+  ?assert(
+    bowling:tweetable_ermahgerd_score([
+        [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]
+        ]) =:= "Ermahgerd, skernker tern... Berlin scer: 0"
+    ),
+  ?assert(
+    bowling:tweetable_ermahgerd_score([
+        [Strike], [Strike], [8,Spare], [Strike], [9,Spare], [8,Spare], [Strike], [Strike], [9,Spare], [Strike,Strike,Strike]
+        ]) =:= "Ermahgerd, germ erver. Berlin scer: 225"
+    ),
+  ?assert(
+    bowling:tweetable_ermahgerd_score([
+        [Strike], [Strike], [Strike], [Strike], [Strike], [Strike], [Strike], [Strike], [Strike], [Strike,Strike,Strike]
+        ]) =:= "Ermahgerd, perferct germ! Berlin scer: 300"
+    ).
