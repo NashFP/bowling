@@ -1,5 +1,5 @@
 -module(bowling).
--export([score/1, tweetable_score/1]).
+-export([score/1, tweetable_score/1, tweetable_ermahgerd_score/1]).
 
 score(Frames) ->
   Score = score(lists:flatten(Frames), 0),
@@ -18,6 +18,19 @@ tweetable_score(Frames) ->
       lists:flatten(io_lib:format("~s Bowling score: ~w", [Msg, Score]));
     incomplete ->
       lists:flatten(io_lib:format("~s Incomplete bowling score: ~w", [Msg, Score]))
+  end.
+
+tweetable_ermahgerd_score(Frames) ->
+  {Status, Score, _} = score(Frames),
+  case {Status,Score} of
+    {complete, 0} ->
+      "Ermahgerd, skernker tern... Berlin scer: 0";
+    {complete, 300} ->
+      "Ermahgerd, perferct germ! Berlin scer: 300";
+    {complete, _} ->
+      lists:flatten(io_lib:format("Ermahgerd, germ erver. Berlin scer: ~w", [Score]));
+    {incomplete, _} ->
+      lists:flatten(io_lib:format("Ermahgerd, dernt gerv erp, kerp plin! Erncermplert berlin scer: ~w", [Score]))
   end.
 
 score([], Score) ->
