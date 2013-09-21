@@ -3,7 +3,6 @@
 // The flattening approach is helpful because the follow-up rolls
 // to a spare or strike may or may not be in the same frame due 
 // to those extra bonus rolls at the end of the 10th frame.
-
 let rec score frames =
     if frames = [] then 0 else
     match List.collect id frames with
