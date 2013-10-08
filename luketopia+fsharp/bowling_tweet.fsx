@@ -1,7 +1,7 @@
 // I wanted to see if I could further condense my solution to fit into a 140 character tweet.
-// Here is the result (132 characters):
+// Here is the result (128 characters):
 
-let rec s f=f|>function[]->0|h::t as l->(List.collect id l|>function|a::b::c::_ when a+b>=10->a+b+c|10::b::_->10+b|_->Seq.sum h)+s t
+let rec s f=f|>function[]->0|h::t as l->(List.concat l|>function|a::b::c::_ when a+b>=10->a+b+c|10::b::_->10+b|_->Seq.sum h)+s t
 
 // Here's what it looks like with formatting:
 //

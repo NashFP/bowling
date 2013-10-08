@@ -4,14 +4,14 @@ let rec score frames =
     if frames = [] then 0 else
     match Seq.sum frames.Head with
     | 10 -> frames 
-            |> List.collect id 
+            |> Seq.concat 
             |> Seq.truncate 3 
             |> Seq.sum 
     | x -> x
     + score frames.Tail
 
-// Tweetable version (117 characters)
-let rec s f=if f=[]then 0 else(Seq.sum f.Head|>function|10->List.collect id f|>Seq.truncate 3|>Seq.sum|x->x)+s f.Tail
+// Tweetable version (112 characters)
+let rec s f=if f=[]then 0 else(Seq.sum f.Head|>function|10->Seq.concat f|>Seq.truncate 3|>Seq.sum|x->x)+s f.Tail
 
 // Load and run our tests
 #load "bowling_test.fsx"

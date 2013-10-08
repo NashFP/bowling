@@ -5,7 +5,7 @@
 // to those extra bonus rolls at the end of the 10th frame.
 let rec score frames =
     if frames = [] then 0 else
-    match List.collect id frames with
+    match List.concat frames with
     | 10::b::c::_ -> 10 + b + c             // Strike + 2 rolls
     | 10::b::_ -> 10 + b                    // Strike + 1 roll
     | a::b::c::_ when a + b = 10 -> 10 + c  // Spare + 1 roll
