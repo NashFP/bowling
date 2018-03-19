@@ -16,5 +16,5 @@ come after Roll1.
 Showing a message can be tricky, because if the last frame in the game
 is a strike, that's the first frame processed by foldr, so we have to
 remember the strike message while processing the rest of the frames. In
-this case, we start with a dummy message ("~") and only replace it with
-a message if it is still "~".
+this case, we start with a dummy message ("\~") and only replace it with
+a message if it is still "\~".
