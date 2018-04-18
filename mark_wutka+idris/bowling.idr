@@ -24,7 +24,7 @@ processFrame [] (GameState r1 r2 f s c m) = GameState r1 r2 f s False (makeMessa
 
 -- Strike
 processFrame [10] (GameState r1 r2 f s c m) =
-    GameState 10 r1 (f+1) (s+10+r1+r2) (f==9) (makeMessage m "Strike")
+    GameState 10 r1 (f+1) (s+10+r1+r2) c (makeMessage m "Strike")
 
 -- Incomplete frame
 processFrame [roll] (GameState r1 r2 f s c m) =
@@ -33,35 +33,39 @@ processFrame [roll] (GameState r1 r2 f s c m) =
 -- Two roll frame, must check for spare here
 processFrame [roll1,roll2] (GameState r1 r2 f s c m) =
     if roll1+roll2 == 10 then
-        GameState roll1 roll2 (f+1) (s + 10 + r1) (f==9) (makeMessage m "Spare")
+        GameState roll1 roll2 (f+1) (s + 10 + r1) c (makeMessage m "Spare")
+    else if (roll1+roll2 < 0) || (roll1 + roll2 > 10) then
+      GameState roll1 roll2 (f+1) (s + roll1 + roll2) False "Invalid frame"
     else
-        GameState roll1 roll2 (f+1) (s + roll1 + roll2) (f==9) (makeMessage m "")
+        GameState roll1 roll2 (f+1) (s + roll1 + roll2) c (makeMessage m "")
 
 -- Last frame in the game
 processFrame [roll1,roll2,roll3] (GameState r1 r2 f s c m) =
-    if roll1 == 10 then
-        GameState roll1 roll2 (f+1) (s + 10 + roll2 + roll3) (f==9) (makeMessage m "Strike")
+    if f > 0 then
+      GameState roll1 roll2 (f+1) (s + roll1 + roll2) False "Invalid frame"
+    else if roll1 == 10 then
+        GameState roll1 roll2 (f+1) (s + 10 + roll2 + roll3) c (makeMessage m "Strike")
     else if roll1 + roll2 == 10 then
-        GameState roll1 roll2 (f+1) (s + 10 + roll3) (f==9) (makeMessage m "Spare")
+        GameState roll1 roll2 (f+1) (s + 10 + roll3) c (makeMessage m "Spare")
     else
-        GameState roll1 roll2 (f+1) (s + roll1 + roll2) (f==9) (makeMessage m "")
+        GameState roll1 roll2 (f+1) (s + roll1 + roll2) c (makeMessage m "")
 processFrame _ (GameState r1 r2 f s c m) =
-    GameState r1 r2 f s c (makeMessage m "Invalid frame")
+    GameState r1 r2 f s c "Invalid frame"
 
 -- Pull the desired results from the game state, replace the "~" message with "" if
 -- it is still there
 extractResult : GameStateType -> (Int, Bool, String)
-extractResult (GameState _ _ _ s c m) = 
-    if s == 300 && c then
-        (s,c,"Perfect Game")
-    else if c then
-        (s,c,"Game Over")
+extractResult (GameState _ _ f s c m) =
+    if s == 300 && (f == 10) && c then
+        (s,True,"Perfect Game")
+    else if (f == 10) && c then
+        (s,True,"Game Over")
     else if m == "~" then
-        (s,c,"")
+        (s,False,"")
     else
-        (s,c,m)
+        (s,False,m)
 
 scoreGame : List (List Int) -> (Int, Bool, String)
 scoreGame frames = extractResult (foldr processFrame initGame frames)
     where
-        initGame = GameState 0 0 0 0 False "~"
+        initGame = GameState 0 0 0 0 True "~"
